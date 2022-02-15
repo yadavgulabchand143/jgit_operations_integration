@@ -10,7 +10,7 @@ public class DemoApplication {
 	public static void main(String[] args) {
 		ConfigurableApplicationContext context =   SpringApplication.run(DemoApplication.class, args);
 		EntryPoint entryPoint = context.getBean(EntryPoint.class);
-		entryPoint.pushToRemote("Create EntryPoint class and all operation call from here", "yadavgulabchand143", "develop");
+		entryPoint.pushToRemote("handle Exception", "yadavgulabchand143", "develop");
 		
 	}
 

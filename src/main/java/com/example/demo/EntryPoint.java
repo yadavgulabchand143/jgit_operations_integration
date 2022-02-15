@@ -1,8 +1,5 @@
 package com.example.demo;
 
-import java.io.IOException;
-
-import org.eclipse.jgit.api.errors.GitAPIException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -21,10 +18,15 @@ public class EntryPoint {
 	/**
 	 * 
 	 * create a new repository in local and initialize with GIT repository
-	 * @throws IOException
+	 * 
 	 */
-	public void createRepository() throws IOException {
-		createNewRepository.createRepositoryInLocal();
+	public void createRepository(){
+		try {
+			createNewRepository.createRepositoryInLocal();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**
@@ -48,11 +50,14 @@ public class EntryPoint {
 	/**
 	 * 
 	 * Pull the updates from remote to local
-	 * @throws IOException
-	 * @throws GitAPIException
+	 * 
 	 */
-	public void pullFromRemote() throws IOException, GitAPIException{
-		gitPullAndPushOperation.pullFromRemoteRepository();
+	public void pullFromRemote() {
+		try {
+			gitPullAndPushOperation.pullFromRemoteRepository();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 	}
 	
 	/**
@@ -108,11 +113,14 @@ public class EntryPoint {
 	/**
 	 * switch branch from one branch to other branch in local if reference already exist in local
 	 * @param switchBranchName
-	 * @throws GitAPIException 
-	 * @throws IOException 
 	 */
-	public void switchBranch(String switchBranchName) throws IOException, GitAPIException {
-		gitBranchOperation.switchBranchInLocal(switchBranchName);
+	public void switchBranch(String switchBranchName) {
+		try {
+			gitBranchOperation.switchBranchInLocal(switchBranchName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	/**
@@ -141,11 +149,15 @@ public class EntryPoint {
 	 *  TODO
 	 *  delete branch from local as well as remote repository
 	 * @param deleteBranchName
-	 * @throws IOException
-	 * @throws GitAPIException
+	 *
 	 */
-	public void deleteBranch(String deleteBranchName) throws IOException, GitAPIException {
-		gitBranchOperation.deleteBranch(deleteBranchName);
+	public void deleteBranch(String deleteBranchName) {
+		try {
+			gitBranchOperation.deleteBranch(deleteBranchName);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 }
