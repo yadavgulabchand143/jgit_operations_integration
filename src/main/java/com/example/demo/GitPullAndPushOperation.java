@@ -23,7 +23,7 @@ public class GitPullAndPushOperation {
 	private String gitUserName = "yadavgulabchand143";
 
 	@Value("${git.password}")
-	private String gitPassword = "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";
+	private String gitPassword = "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";
 
 	@Value("${git.local.dir}")
 	private String localDirPath = "D:\\Demo_Project\\demo";

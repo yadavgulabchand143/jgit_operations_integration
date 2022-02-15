@@ -22,7 +22,7 @@ public class GitBranchOperation {
 	private String gitUserName = "yadavgulabchand143";
 
 	@Value("${git.password}")
-	private String gitPassword = "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";
+	private String gitPassword = "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";
 
 	String BranchPathDel = "refs/heads/";
 	String BranchPathRemoteDel = "refs/remotes/origin/";
