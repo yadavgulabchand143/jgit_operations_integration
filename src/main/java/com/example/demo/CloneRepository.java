@@ -4,24 +4,29 @@ import java.io.File;
 
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.example.demo.helper.GitHelper;
 
+@Component
 public class CloneRepository {
 	
+	@Autowired
+	private GitHelper gitHelper;
 	
 	@Value("${git.username}")
-	private String gitUserName = "yadavgulabchand143";
+	private String gitUserName;
 	
 	@Value("${git.password}")
-	private String gitPassword ="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";
+	private String gitPassword;
 	
 	@Value("${git.local.dir}")
-	private String localDirPath = "D:\\Demo_Project\\demo";
+	private String localDirPath ;
 	
 	@Value("${git.remote.dir}")
-	private String REMOTE_REPO_URL = "https://github.com/yadavgulabchand143/jgit_operations_integration.git";
+	private String REMOTE_REPO_URL;
 	
 	/***
 	 * Git clone remote repo into local directory.
@@ -95,7 +100,7 @@ public class CloneRepository {
 	public void getCurrentRespositoryDetails() {
 		System.out.println("BEGIN ::: Inside  getCurrentRespositoryDetails() method of CloneRepository");
 		try {
-			Git git = new Git(GitHelper.openRepository().getRepository());
+			Git git = new Git(gitHelper.openRepository().getRepository());
 			System.out.println("Repository Details: " + git.getRepository().getDirectory());
 		}catch (Exception e) {
 			System.out.println("Exception occurred while getting repository details");

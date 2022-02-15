@@ -6,11 +6,13 @@ import java.io.IOException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.storage.file.FileRepositoryBuilder;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
+@Component
 public class GitHelper {
 	
 	@Value("${git.local.dir}")
-	private static String localDirPath = "D:\\Demo_Project\\Gulab";
+	private String localDirPath ;
 
 	public static boolean repositoryExists(File directory) {
 		System.out.println("BEGIN ::: Inside  repositoryExists() method of GitHelper");
@@ -32,7 +34,7 @@ public class GitHelper {
 	}
 
 	/*** Open the Repository ***/
-	public static Git openRepository() throws IOException {
+	public Git openRepository() throws IOException {
 		System.out.println("BEGIN ::: Inside  openRepository() method of GitHelper");
 		Git git = null;
 		try {

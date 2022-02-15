@@ -12,26 +12,31 @@ import org.eclipse.jgit.lib.Ref;
 import org.eclipse.jgit.lib.Repository;
 import org.eclipse.jgit.transport.RefSpec;
 import org.eclipse.jgit.transport.UsernamePasswordCredentialsProvider;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import com.example.demo.helper.GitHelper;
 
+@Component
 public class GitBranchOperation {
+	
+	@Autowired
+	private GitHelper gitHelper;
 
 	@Value("${git.username}")
-	private String gitUserName = "yadavgulabchand143";
+	private String gitUserName;
 
 	@Value("${git.password}")
-	private String gitPassword = "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";
+	private String gitPassword;
+	
+	private final String localBranchpath = "refs/heads/";
+	
+	private final String remoteBranchpath = "refs/remotes/origin/";
 
-	String BranchPathDel = "refs/heads/";
-	String BranchPathRemoteDel = "refs/remotes/origin/";
-	String newBranchNameDel = "test";
-	String fromCutBranchNameDel = "master";
-
-	public void CreateNewBranch(String fromCutBranchName, String branchPath, String newBranchName) {
+	public void CreateNewBranch(String fromCutBranchName, String newBranchName) {
 		System.out.println("BEGIN ::: Inside  CreateNewBranch() method of GitBranchOperation");
-		try (Repository repository = GitHelper.openRepository().getRepository()) {
+		try (Repository repository = gitHelper.openRepository().getRepository()) {
 			try (Git git = new Git(repository)) {
 				List<Ref> call = git.branchList().call();
 				for (Ref ref : call) {
@@ -42,7 +47,7 @@ public class GitBranchOperation {
 				List<Ref> refs = git.branchList().call();
 				for (Ref ref : refs) {
 					System.out.println("Had branch: " + ref.getName());
-					if (ref.getName().equals(branchPath + newBranchName)) {
+					if (ref.getName().equals(localBranchpath + newBranchName)) {
 						System.out.println("Removing branch if same branch name is already exist");
 						git.branchDelete().setBranchNames(newBranchName).setForce(true).call();
 						break;
@@ -50,7 +55,7 @@ public class GitBranchOperation {
 				}
 
 				System.out.println("creating new branch name : " + newBranchName);
-				git.branchCreate().setName(newBranchName).setStartPoint(branchPath + fromCutBranchName).call();
+				git.branchCreate().setName(newBranchName).setStartPoint(localBranchpath + fromCutBranchName).call();
 
 				System.out.println("checout new branch into Local : " + newBranchName);
 				git.checkout().setName(newBranchName).call();
@@ -75,13 +80,13 @@ public class GitBranchOperation {
 		}
 	}
 
-	public void switchBranchInLocal(String branchPath, String switchBranchName) throws IOException, GitAPIException {
+	public void switchBranchInLocal( String switchBranchName) throws IOException, GitAPIException {
 		System.out.println("BEGIN ::: Inside  switchBranchInLocal() method of GitBranchOperation");
-		try (Repository repository = GitHelper.openRepository().getRepository()) {
+		try (Repository repository = gitHelper.openRepository().getRepository()) {
 			try (Git git = new Git(repository)) {
 				List<Ref> refs = git.branchList().call();
 				for (Ref ref : refs) {
-					if (ref.getName().equals(branchPath + switchBranchName)) {
+					if (ref.getName().equals(localBranchpath + switchBranchName)) {
 						git.checkout().setName(switchBranchName).call();
 						break;
 					}
@@ -94,10 +99,10 @@ public class GitBranchOperation {
 		}
 	}
 
-	public void deleteBranch(String branchPath, String deleteBranchName, String BranchPathRemote)
+	public void deleteBranch(String deleteBranchName)
 			throws IOException, GitAPIException {
 		System.out.println("BEGIN ::: Inside  deleteBranch() method of GitBranchOperation");
-		try (Repository repository = GitHelper.openRepository().getRepository()) {
+		try (Repository repository = gitHelper.openRepository().getRepository()) {
 			try (Git git = new Git(repository)) {
 				List<Ref> call = git.branchList().call();
 				for (Ref ref : call) {
@@ -109,13 +114,13 @@ public class GitBranchOperation {
 				List<Ref> refs = git.branchList().call();
 				for (Ref ref : refs) {
 					System.out.println("Had branch: " + ref.getName());
-					if (ref.getName().equals(branchPath + deleteBranchName)) {
+					if (ref.getName().equals(localBranchpath + deleteBranchName)) {
 						System.out.println("Removing branch : " + deleteBranchName);
 						git.branchDelete().setBranchNames(deleteBranchName).setForce(true).call();
 						// TODO ::: Delete Branch from remote
-						git.branchDelete().setBranchNames(BranchPathRemote + deleteBranchName).setForce(true).call();
+						git.branchDelete().setBranchNames(remoteBranchpath + deleteBranchName).setForce(true).call();
 						RefSpec refSpec = new RefSpec().setSource(null)
-								.setDestination(BranchPathRemote + deleteBranchName).setForceUpdate(true);
+								.setDestination(remoteBranchpath + deleteBranchName).setForceUpdate(true);
 						git.push()
 								.setCredentialsProvider(
 										new UsernamePasswordCredentialsProvider(gitUserName, gitPassword))
@@ -145,7 +150,7 @@ public class GitBranchOperation {
 	public void listBranches() {
 		System.out.println("BEGIN ::: Inside  listBranches() method of GitBranchOperation");
 		try {
-			Git git = GitHelper.openRepository();
+			Git git = gitHelper.openRepository();
 			System.out.println("Listing local branches:");
 			git.branchList().call().stream().forEach(r -> System.out.println(r.getName()));
 
@@ -162,7 +167,7 @@ public class GitBranchOperation {
 		System.out.println("END ::: Inside  getCuurentBranchName() method of GitBranchOperation");
 		String currentBranch = null;
 		try {
-			Git git = GitHelper.openRepository();
+			Git git = gitHelper.openRepository();
 			currentBranch = git.getRepository().getFullBranch();
 			System.out.println("current branch name::: "+currentBranch);
 		} catch (Exception e) {
@@ -181,7 +186,7 @@ public class GitBranchOperation {
 	public void findAndCheckoutBranch(String branchName) {
 		System.out.println("BEGIN ::: Inside  findAndCheckoutBranch() method of GitBranchOperation");
 		try {
-			Git git = new Git(GitHelper.openRepository().getRepository());
+			Git git = new Git(gitHelper.openRepository().getRepository());
 			// Find develop branch from remote repo.
 			Optional<String> developBranch = git.branchList().setListMode(ListMode.REMOTE).call().stream()
 					.map(r -> r.getName()).filter(n -> n.contains(branchName)).findAny();
