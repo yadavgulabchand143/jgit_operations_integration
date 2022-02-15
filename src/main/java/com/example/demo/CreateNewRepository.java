@@ -6,12 +6,13 @@ import java.io.IOException;
 import org.eclipse.jgit.api.Git;
 import org.eclipse.jgit.lib.Repository;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
-
+@Component
 public class CreateNewRepository {
 
 	@Value("${git.local.dir}")
-	private static String localDirPath = "D:\\Demo_Project\\demo";
+	private static String localDirPath;
 
 	public Repository createRepositoryInLocal() throws IOException {
 		System.out.println("BEGIN ::: Inside  createRepositoryInLocal() method of CreateNewRepository");

@@ -2,12 +2,16 @@ package com.example.demo;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.context.ConfigurableApplicationContext;
 
-@SpringBootApplication
+@SpringBootApplication(scanBasePackages="com.example.demo")
 public class DemoApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(DemoApplication.class, args);
+		ConfigurableApplicationContext context =   SpringApplication.run(DemoApplication.class, args);
+		EntryPoint entryPoint = context.getBean(EntryPoint.class);
+		entryPoint.pushToRemote("Create EntryPoint class and all operation call from here", "yadavgulabchand143", "develop");
+		
 	}
 
 }
