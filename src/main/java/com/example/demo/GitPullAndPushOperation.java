@@ -1,6 +1,5 @@
 package com.example.demo;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -55,7 +54,7 @@ public class GitPullAndPushOperation {
 	public void pushToRemoteRepository(String commitMessage, String authorName, String pushBranchName) {
 		System.out.println("BEGIN ::: Inside  pushToRemoteRepository() method of GitPullAndPushOperation");
 		try {
-			Git git = Git.open(new File(localDirPath));
+			Git git = gitHelper.openRepository();
 
 			git.add().addFilepattern(".").call();
 			git.commit().setMessage(commitMessage).setAuthor("author", authorName).call();
@@ -89,7 +88,7 @@ public class GitPullAndPushOperation {
 			Path destnationPath = Paths.get(destinationFileLocation);
 			Files.copy(sourcepath, destnationPath);
 
-			try (Git git = Git.open(new File(localDirPath))) {
+			try (Git git = gitHelper.openRepository()) {
 				git.add().addFilepattern(".").call();
 				git.commit().setMessage(commitMessage).setAuthor("author", authorName).call();
 

@@ -48,7 +48,7 @@ public class CloneRepository {
 
 			if (gitDirExists) {
 				System.out.println("Existing Clone Directory" + cloneLocalDirPath);
-				result = Git.open(cloneLocalDirPath);
+				result = gitHelper.openRepository();
 			} else {
 				System.out.println("Clone new Directory" + cloneLocalDirPath);
 				result = Git.cloneRepository().setURI(REMOTE_REPO_URL)
@@ -81,7 +81,7 @@ public class CloneRepository {
 
 			if (gitDirExists) {
 				System.out.println("Existing Clone Directory" + cloneLocalDirPath);
-				result = Git.open(cloneLocalDirPath);
+				result = gitHelper.openRepository();
 			} else {
 				result = Git.cloneRepository().setURI(REMOTE_REPO_URL)
 						.setCredentialsProvider(new UsernamePasswordCredentialsProvider(gitUserName, gitPassword))
