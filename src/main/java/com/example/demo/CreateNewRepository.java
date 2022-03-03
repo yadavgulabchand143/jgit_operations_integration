@@ -36,6 +36,7 @@ public class CreateNewRepository {
 			// create the directory
 			try (Git git = Git.init().setDirectory(localPath).call()) {
 				System.out.println("Having repository: " + git.getRepository().getDirectory());
+				repository = git.getRepository();
 			}
 		} catch (Exception e) {
 			System.out.println("Exception occured while creating new repository");
